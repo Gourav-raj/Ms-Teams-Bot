@@ -43,7 +43,7 @@ opt.add_experimental_option("prefs", { \
 
 
 
-credentials={'email':'example@gmail.com','password':'pass'}
+credentials={'email':'example@manit.ac.in','password':'pas'}
 def login():
 	global driver
 	print("logging in")
@@ -57,9 +57,12 @@ def login():
 	passwordField.click()
 	passwordField.send_keys(credentials['password'])
 	time.sleep(5)
-	driver.find_element_by_id('idChkBx_PWD_KMSI0Pwd').click() #remember login
+	# driver.find_element_by_id('idChkBx_PWD_KMSI0Pwd').click() #remember login
 	driver.find_element_by_xpath('//*[@id="idSIButton9"]').click() #Sign in button
-	time.sleep(10)#in_Case of Slow internet increase this time
+	time.sleep(2)
+	driver.find_element_by_xpath('//*[@id="idSIButton9"]').click() #Sign in button
+	
+	time.sleep(10)#in_Case of Slow internet increase this time 
 	#driver.find_element_by_class_name('use-app-lnk').click() #use the app link
 
 
@@ -169,6 +172,8 @@ def joinclass(class_name,start_time,end_time):
 		if class_name.lower() in i.get_attribute('innerHTML').lower():
 			print("JOINING CLASS ",class_name)
 			i.click()
+			if(driver.find_elements_by_class_name('app-svg icons-triangle-right-small icons-rtl-flip')):
+				i.click()
 			break
 
 
@@ -178,6 +183,7 @@ def joinclass(class_name,start_time,end_time):
 	try:
 		joinbtn = driver.find_element_by_class_name("ts-calling-join-button")
 		joinbtn.click()
+		
 
 	except:
 		#join button not found
@@ -207,7 +213,13 @@ def joinclass(class_name,start_time,end_time):
 	time.sleep(5)
 	joinnowbtn = driver.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[1]/div/calling-pre-join-screen/div/div/div[2]/div[1]/div[2]/div/div/section/div[1]/div/div/button')
 	joinnowbtn.click()
-
+	#Turnoff incoming video[TODO]
+	time.sleep(3)
+	# driver.find_element_by_class_name('video-stream-container').click()
+	driver.find_element_by_class_name('app-svg icons-more app-bar-extra-icons-fill-colors').click()
+	#app-svg icons-more app-bar-extra-icons-fill-colors
+	driver.find_element_by_class_name('app-svg icons-call-incoming-video-off').click()
+	#app-svg icons-call-incoming-video-off
 	discord_webhook.send_msg(class_name=class_name,status="joined",start_time=start_time,end_time=end_time)
 	
 	#now schedule leaving class
